@@ -6,13 +6,62 @@
   <title>Lucas Antunes</title>
   <style>
     :root { color-scheme: light dark; }
-    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 4rem auto; padding: 0 1rem; line-height: 1.6; }
+    body { font-family: system-ui, sans-serif; max-width: 42rem; margin: 3rem auto; padding: 0 1rem; line-height: 1.6; }
+    header { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+    header img { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; }
+    h1 { margin: 0; }
+    h2 { margin-top: 2.5rem; border-bottom: 1px solid currentColor; }
+    h3 { margin-bottom: 0; }
+    .meta { margin: 0; opacity: .7; }
   </style>
 </head>
 <body>
+  <header>
+    <img src="headshot.jpg" alt="Lucas Antunes" width="160" height="160">
+    <div>
+      <h1>Lucas Antunes</h1>
+      <p class="meta">Computer Science student at Penn State</p>
+    </div>
+  </header>
+
   <main>
-    <h1>Lucas Antunes</h1>
-    <p>I'm a computer science student who likes building things that solve real problems, from small command-line tools to full web apps. I'm interested in software engineering, systems, and learning new languages along the way.</p>
+    <p>Hi! I'm a CS student at Penn State who likes building things across the whole stack, from web apps and databases down to microcontrollers and network benchmarks. Lately I've been into computer vision and seeing how different languages hold up under load. Outside of code, I spent a few years on stage crew building sets and props.</p>
+
+    <h2>Projects</h2>
+
+    <h3>HTTP Server Benchmark</h3>
+    <p class="meta">Python, C, Go, Rust</p>
+    <p>Wrote the same HTTPS server four times, in Python, C, Go and Rust, ran it on a Raspberry Pi 5, and load-tested it with <code>wrk</code> at 10, 100 and 1,000 concurrent connections. Go, C and Rust all leveled off at about 56,500 requests per second, which works out to 99.4% of the Pi's 1 Gbps Ethernet. The bottleneck was the network hardware, not the code.</p>
+
+    <h3>Course Scheduler</h3>
+    <p class="meta">Java, SQL</p>
+    <p>A Java desktop app with admin and student views that handles courses, enrollment and scheduling in one place, replacing manual course-management work.</p>
+
+    <h3>Face Recognition Attendance</h3>
+    <p class="meta">Python, OpenCV, NumPy</p>
+    <p>A real-time attendance system that recognizes known faces from a live camera feed and logs each person's name and arrival time to a CSV file, so nobody has to take roll call.</p>
+
+    <h3>STM32 Pong</h3>
+    <p class="meta">Embedded C, IEEE at Penn State</p>
+    <p>Programmed and wired an STM32 microcontroller from scratch to run a playable Pong game controlled with physical buttons.</p>
+
+    <h2>Education</h2>
+    <h3>The Pennsylvania State University</h3>
+    <p class="meta">B.S. Computer Science, minor in AI Engineering (intended) · Expected May 2028 · GPA 3.66</p>
+    <p>Coursework: Data Structures and Algorithms, Systems Programming, Object-Oriented Programming with Web-Based Applications, Probability, Intro to Computer Vision.</p>
+
+    <h2>Involvement</h2>
+    <h3>IEEE, Penn State</h3>
+    <p class="meta">Member · Aug 2025 – Present</p>
+    <h3>High School Stage Crew</h3>
+    <p class="meta">Stage Manager / Stagehand · 2022 – 2024</p>
+    <p>Led a team of 10+ stagehands building and running props for shows including <i>Mean Girls</i>, <i>Catch Me If You Can</i> and <i>The Sound of Music</i>.</p>
+
+    <h2>Skills</h2>
+    <p><b>Languages:</b> Java, Python, C, C++, Go, Rust, SQL, JavaScript, HTML, CSS<br>
+    <b>Tools:</b> NumPy, OpenCV<br>
+    <b>Spoken:</b> English, Portuguese (bilingual), French (elementary)</p>
+    <p class="meta">National Honor Society · NYS Seal of Civic Readiness</p>
   </main>
 </body>
 </html>

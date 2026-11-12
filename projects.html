@@ -14,13 +14,18 @@
     <div>
       <p class="mono"><a href="index.html">← Lucas Antunes</a></p>
       <h1>Projects</h1>
+      <div class="filters" role="group" aria-label="Show categories">
+        <button class="chip" id="all">All</button>
+        <label class="chip"><input type="checkbox" value="networking" checked> Networking</label>
+        <label class="chip"><input type="checkbox" value="system-design" checked> System Design</label>
+        <label class="chip"><input type="checkbox" value="misc" checked> Miscellaneous</label>
+      </div>
     </div>
   </header>
 
   <main>
-    <section class="card" id="networking"><h2>Networking</h2><div class="grid"></div></section>
-    <section class="card" id="system-design"><h2>System Design</h2><div class="grid"></div></section>
-    <section class="card" id="misc"><h2>Miscellaneous</h2><div class="grid"></div></section>
+    <p class="card meta" id="none" hidden>No categories selected. Pick one above, or press All.</p>
+    <div class="grid" id="projects"></div>
   </main>
 
   <dialog id="view" aria-labelledby="view-title">
@@ -76,17 +81,36 @@
       view.scrollTop = 0;
     }
 
+    const grid = document.getElementById("projects");
     for (const p of PROJECTS) {
-      const grid = document.querySelector(`#${p.category} .grid`);
+      const box = document.querySelector(`.filters input[value="${p.category}"]`);
       // catches typos in projects.js, e.g. category: "networkng"
-      if (!grid || !p.title || !p.images?.length) { console.error("Bad project entry in projects.js:", p); continue; }
+      if (!box || !p.title || !p.images?.length) { console.error("Bad project entry in projects.js:", p); continue; }
       const card = document.createElement("button");
       card.className = "card";
-      card.append(el("h3", p.title), el("p", p.summary));
+      card.dataset.category = p.category;
+      const tag = el("span", box.parentElement.textContent.trim());
+      tag.className = "tag";
+      card.append(tag, el("h3", p.title), el("p", p.summary));
       card.lastChild.className = "meta";
       card.onclick = () => open(p);
       grid.append(card);
     }
+
+    // category filter: each checkbox shows or hides the cards of its category
+    const boxes = [...document.querySelectorAll(".filters input")];
+    function applyFilter() {
+      const on = boxes.filter(b => b.checked).map(b => b.value);
+      for (const card of grid.children) card.hidden = !on.includes(card.dataset.category);
+      document.getElementById("none").hidden = on.length > 0;
+      document.getElementById("all").classList.toggle("on", boxes.every(b => b.checked));
+    }
+    boxes.forEach(b => b.onchange = applyFilter);
+    document.getElementById("all").onclick = () => { boxes.forEach(b => b.checked = true); applyFilter(); };
+    // from a home page cell (projects.html#networking): only that category; otherwise all
+    const start = boxes.find(b => "#" + b.value === location.hash);
+    boxes.forEach(b => b.checked = !start || b === start);
+    applyFilter();
 
     document.getElementById("close").onclick = () => view.close();
     view.querySelector(".prev").onclick = () => showSlide(-1);

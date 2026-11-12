@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projects · Lucas Antunes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="card">
+    <div>
+      <p class="mono"><a href="index.html">← Lucas Antunes</a></p>
+      <h1>Projects</h1>
+    </div>
+  </header>
+
+  <main>
+    <section class="card" id="networking"><h2>Networking</h2><div class="grid"></div></section>
+    <section class="card" id="system-design"><h2>System Design</h2><div class="grid"></div></section>
+    <section class="card" id="misc"><h2>Miscellaneous</h2><div class="grid"></div></section>
+  </main>
+
+  <dialog id="view" aria-labelledby="view-title">
+    <div>
+      <button class="btn" id="close">← Back</button>
+      <h1 id="view-title"></h1>
+      <p class="meta mono" id="view-meta"></p>
+      <div class="slides">
+        <img id="slide" alt="">
+        <button class="btn prev" aria-label="Previous screenshot">‹</button>
+        <button class="btn next" aria-label="Next screenshot">›</button>
+      </div>
+      <p class="meta" id="slide-count"></p>
+      <div id="view-details"></div>
+    </div>
+  </dialog>
+
+  <script src="projects.js"></script>
+  <script>
+    const view = document.getElementById("view");
+    const slide = document.getElementById("slide");
+    let current, index = 0;
+
+    function el(tag, text) {
+      const e = document.createElement(tag);
+      e.textContent = text;
+      return e;
+    }
+
+    function showSlide(step) {
+      const imgs = current.images;
+      index = (index + step + imgs.length) % imgs.length;
+      slide.src = imgs[index];
+      slide.alt = `${current.title}, screenshot ${index + 1} of ${imgs.length}`;
+      document.getElementById("slide-count").textContent = `${index + 1} / ${imgs.length}`;
+      view.querySelectorAll(".slides .btn").forEach(b => b.hidden = imgs.length < 2);
+    }
+
+    function open(p) {
+      current = p;
+      index = 0;
+      document.getElementById("view-title").textContent = p.title;
+      const meta = document.getElementById("view-meta");
+      meta.replaceChildren(`${p.date} · ${p.tech}`);
+      if (p.github) {
+        const a = el("a", "GitHub ↗");
+        a.href = p.github;
+        meta.append(" · ", a);
+      }
+      document.getElementById("view-details").innerHTML = p.details; // trusted: written by hand in projects.js
+      showSlide(0);
+      view.showModal();
+      view.scrollTop = 0;
+    }
+
+    for (const p of PROJECTS) {
+      const grid = document.querySelector(`#${p.category} .grid`);
+      // catches typos in projects.js, e.g. category: "networkng"
+      if (!grid || !p.title || !p.images?.length) { console.error("Bad project entry in projects.js:", p); continue; }
+      const card = document.createElement("button");
+      card.className = "card";
+      card.append(el("h3", p.title), el("p", p.summary));
+      card.lastChild.className = "meta";
+      card.onclick = () => open(p);
+      grid.append(card);
+    }
+
+    document.getElementById("close").onclick = () => view.close();
+    view.querySelector(".prev").onclick = () => showSlide(-1);
+    view.querySelector(".next").onclick = () => showSlide(1);
+    view.addEventListener("keydown", e => {
+      if (e.key === "ArrowLeft") showSlide(-1);
+      if (e.key === "ArrowRight") showSlide(1);
+    });
+  </script>
+</body>
+</html>
